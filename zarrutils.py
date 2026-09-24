@@ -92,12 +92,12 @@ def get_dtype(da):
         return {}
 
 
-def get_encoding(dataset):
+def get_encoding(dataset, shards=False):
     return {
         var: {
             "compressors": [get_compressor()],
             "chunks": get_chunks(dataset[var].sizes),
-            "shards": get_shards(dataset[var].sizes),
+            **({"shards": get_shards(dataset[var].sizes)} if shards else {}),
             **get_dtype(dataset[var]),
         }
         for var in dataset.variables
